@@ -90,7 +90,7 @@ class HtHttpClient {
       if (e.error is HtHttpException) {
         throw e.error!;
       }
-      // Otherwise, rethrow the original DioException 
+      // Otherwise, rethrow the original DioException
       // (should ideally not happen)
       rethrow;
     }

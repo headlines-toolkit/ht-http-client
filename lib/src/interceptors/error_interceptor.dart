@@ -22,7 +22,8 @@ class ErrorInterceptor extends Interceptor {
         final statusCode = err.response?.statusCode;
         final responseData = err.response?.data;
         // Attempt to extract a message from the response, default otherwise
-        final message = _extractErrorMessage(responseData) ??
+        final message =
+            _extractErrorMessage(responseData) ??
             err.message ??
             'Unknown error occurred';
 
@@ -57,7 +58,9 @@ class ErrorInterceptor extends Interceptor {
         mappedException = UnknownException('Request cancelled', err);
       // Explicitly handle badCertificate, often related to network/setup issues
       case DioExceptionType.badCertificate:
-         mappedException = NetworkException(err); // Or UnknownException if preferred
+        mappedException = NetworkException(
+          err,
+        ); // Or UnknownException if preferred
       // Explicitly handle unknown type
       case DioExceptionType.unknown:
         // Check if the underlying error is a SocketException (network issue)
@@ -84,7 +87,8 @@ class ErrorInterceptor extends Interceptor {
     );
   }
 
-  /// Attempts to extract a meaningful error message from various response formats.
+  /// Attempts to extract a meaningful error message from various
+  /// response formats.
   String? _extractErrorMessage(dynamic responseData) {
     if (responseData == null) return null;
 
@@ -94,7 +98,8 @@ class ErrorInterceptor extends Interceptor {
           responseData['message'] is String) {
         return responseData['message'] as String;
       }
-      if (responseData.containsKey('error') && responseData['error'] is String) {
+      if (responseData.containsKey('error') &&
+          responseData['error'] is String) {
         return responseData['error'] as String;
       }
       if (responseData.containsKey('detail') &&

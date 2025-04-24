@@ -25,41 +25,35 @@ final class NetworkException extends HtHttpException {
 /// Exception thrown for 400 Bad Request errors.
 final class BadRequestException extends HtHttpException {
   /// {@macro bad_request_exception}
-  const BadRequestException(String message, [DioException? dioException])
-    : super(message, dioException);
+  const BadRequestException(super.message, [super.dioException]);
 }
 
 /// Exception thrown for 401 Unauthorized errors.
 final class UnauthorizedException extends HtHttpException {
   /// {@macro unauthorized_exception}
-  const UnauthorizedException(String message, [DioException? dioException])
-    : super(message, dioException);
+  const UnauthorizedException(super.message, [super.dioException]);
 }
 
 /// Exception thrown for 403 Forbidden errors.
 final class ForbiddenException extends HtHttpException {
   /// {@macro forbidden_exception}
-  const ForbiddenException(String message, [DioException? dioException])
-    : super(message, dioException);
+  const ForbiddenException(super.message, [super.dioException]);
 }
 
 /// Exception thrown for 404 Not Found errors.
 final class NotFoundException extends HtHttpException {
   /// {@macro not_found_exception}
-  const NotFoundException(String message, [DioException? dioException])
-    : super(message, dioException);
+  const NotFoundException(super.message, [super.dioException]);
 }
 
 /// Exception thrown for 5xx Server errors.
 final class ServerException extends HtHttpException {
   /// {@macro server_exception}
-  const ServerException(String message, [DioException? dioException])
-    : super(message, dioException);
+  const ServerException(super.message, [super.dioException]);
 }
 
 /// Exception thrown for unexpected errors.
 final class UnknownException extends HtHttpException {
   /// {@macro unknown_exception}
-  const UnknownException(String message, [DioException? dioException])
-    : super(message, dioException);
+  const UnknownException(super.message, [super.dioException]);
 }
