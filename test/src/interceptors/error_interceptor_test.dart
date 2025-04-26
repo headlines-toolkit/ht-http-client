@@ -38,9 +38,7 @@ void main() {
       registerFallbackValue(
         DioExceptionType.unknown,
       ); // Fallback for DioExceptionType enum
-      registerFallbackValue(
-        RequestOptions(),
-      ); // Fallback for RequestOptions
+      registerFallbackValue(RequestOptions()); // Fallback for RequestOptions
     });
 
     // Helper function to verify the rejection
