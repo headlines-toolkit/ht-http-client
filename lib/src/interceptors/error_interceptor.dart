@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:ht_http_client/src/exceptions.dart';
+import 'package:ht_shared/ht_shared.dart';
 
 /// Dio interceptor that catches [DioException]s and maps them to specific
 /// [HtHttpException] subtypes for clearer error handling downstream.
@@ -16,7 +16,7 @@ class ErrorInterceptor extends Interceptor {
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.connectionError:
         // Handle specific connection-related errors
-        mappedException = NetworkException(err);
+        mappedException = const NetworkException();
       case DioExceptionType.badResponse:
         // Handle errors based on HTTP status codes
         final statusCode = err.response?.statusCode;
@@ -31,46 +31,42 @@ class ErrorInterceptor extends Interceptor {
         if (statusCode == null) {
           mappedException = UnknownException(
             'Received response with null status code. Message: $message',
-            err,
           );
         } else {
           // Proceed with the switch only if statusCode is not null
           switch (statusCode) {
             case HttpStatus.badRequest: // 400
-              mappedException = BadRequestException(message, err);
+              mappedException = BadRequestException(message);
             case HttpStatus.unauthorized: // 401
-              mappedException = UnauthorizedException(message, err);
+              mappedException = UnauthorizedException(message);
             case HttpStatus.forbidden: // 403
-              mappedException = ForbiddenException(message, err);
+              mappedException = ForbiddenException(message);
             case HttpStatus.notFound: // 404
-              mappedException = NotFoundException(message, err);
+              mappedException = NotFoundException(message);
             case >= HttpStatus.internalServerError: // 500 and above
-              mappedException = ServerException(message, err);
+              mappedException = ServerException(message);
             default:
               mappedException = UnknownException(
                 'Received invalid status code: $statusCode. Message: $message',
-                err,
               );
           }
         }
       case DioExceptionType.cancel:
         // Request was cancelled, potentially intentionally.
-        mappedException = UnknownException('Request cancelled', err);
+        mappedException = const UnknownException('Request cancelled');
       // Explicitly handle badCertificate, often related to network/setup issues
       case DioExceptionType.badCertificate:
-        mappedException = NetworkException(
-          err,
-        ); // Or UnknownException if preferred
+        mappedException =
+            const NetworkException(); // Or UnknownException if preferred
       // Explicitly handle unknown type
       case DioExceptionType.unknown:
         // Check if the underlying error is a SocketException (network issue)
         if (err.error is SocketException) {
-          mappedException = NetworkException(err);
+          mappedException = const NetworkException();
         } else {
           // Otherwise, treat as a generic unknown error
           mappedException = UnknownException(
             err.message ?? 'An unknown error occurred',
-            err,
           );
         }
     } // End of switch (err.type)

@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 // Helper class to mock the typedef
+// ignore: one_member_abstracts
 abstract class CallableTokenProvider {
   Future<String?> call();
 }

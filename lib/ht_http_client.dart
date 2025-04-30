@@ -2,8 +2,6 @@
 /// automatic authentication header injection, and custom exception mapping.
 library;
 
-// Export the custom exception types
-export 'src/exceptions.dart';
 // Export the main client class
 export 'src/ht_http_client.dart';
 // Export the TokenProvider typedef for convenience

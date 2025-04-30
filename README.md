@@ -15,7 +15,7 @@ Key features include:
 *   Simplified `get`, `post`, `put`, `delete` methods.
 *   Automatic injection of `Authorization: Bearer <token>` headers via an interceptor.
 *   Token retrieval via a flexible `TokenProvider` function.
-*   Mapping of `DioException` types and non-2xx HTTP status codes to specific `HtHttpException` subtypes (`NetworkException`, `BadRequestException`, `UnauthorizedException`, etc.).
+*   Mapping of `DioException` types and non-2xx HTTP status codes to specific `HtHttpException` subtypes (`NetworkException`, `BadRequestException`, `UnauthorizedException`, etc.) defined in the `ht_shared` package.
 *   Support for request cancellation using `dio`'s `CancelToken`.
 
 ## Getting Started
@@ -37,13 +37,14 @@ Then run `dart pub get` or `flutter pub get`.
 *   **`HtHttpClient` Class:** The main entry point for making requests.
 *   **HTTP Methods:** `get<T>()`, `post<T>()`, `put<T>()`, `delete<T>()`.
 *   **Authentication:** Automatic Bearer token injection using a provided `TokenProvider`.
-*   **Error Handling:** Throws specific `HtHttpException` subtypes for easier error management.
+*   **Error Handling:** Throws specific `HtHttpException` subtypes (defined in `ht_shared`) for easier error management.
 *   **Cancellation:** Supports request cancellation via `CancelToken`.
 
 ## Usage
 
 ```dart
 import 'package:ht_http_client/ht_http_client.dart';
+import 'package:ht_shared/ht_shared.dart'; // Import for HtHttpException types
 import 'package:dio/dio.dart'; // For CancelToken
 
 // 1. Define your token provider function
@@ -92,7 +93,6 @@ void main() async {
     print('Resource not found: ${e.message}');
   } on HtHttpException catch (e) { // Catch other specific or general client errors
     print('HTTP Client Error: ${e.message}');
-    print('Original DioException: ${e.dioException}');
   } catch (e) { // Catch any other unexpected errors
     print('An unexpected error occurred: $e');
   }

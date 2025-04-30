@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:ht_http_client/src/exceptions.dart';
 import 'package:ht_http_client/src/interceptors/error_interceptor.dart';
+import 'package:ht_shared/ht_shared.dart'; // Updated import
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -54,7 +54,7 @@ void main() {
 
       expect(captured.error, isA<T>());
       expect(captured.error, isNotNull);
-      expect((captured.error! as HtHttpException).dioException, originalDioErr);
+      // Removed check for dioException as it's no longer part of HtHttpException
       expect(captured.requestOptions, originalDioErr.requestOptions);
       expect(captured.response, originalDioErr.response);
       expect(captured.type, originalDioErr.type);
@@ -348,6 +348,8 @@ void main() {
           final response = Response(
             requestOptions: mockRequestOptions,
             statusCode: 400,
+            //
+            // ignore: inference_failure_on_collection_literal
             data: {'detail': {}}, // Non-string value
           );
           final dioErr = DioException(

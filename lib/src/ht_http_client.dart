@@ -2,9 +2,9 @@
 // ignore_for_file: only_throw_errors
 
 import 'package:dio/dio.dart';
-import 'package:ht_http_client/src/exceptions.dart';
 import 'package:ht_http_client/src/interceptors/auth_interceptor.dart';
 import 'package:ht_http_client/src/interceptors/error_interceptor.dart';
+import 'package:ht_shared/ht_shared.dart'; // Updated import
 
 /// {@template ht_http_client}
 /// A robust HTTP client built on top of Dio, providing simplified API calls,
