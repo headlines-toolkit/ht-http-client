@@ -30,26 +30,18 @@ class HtHttpClient {
   HtHttpClient({
     required String baseUrl,
     required TokenProvider tokenProvider,
-    required bool isWeb,
     Dio? dioInstance,
     List<Interceptor>? interceptors,
-  }) : _dio = dioInstance ?? Dio(),
-       _isWeb = isWeb {
+  }) : _dio = dioInstance ?? Dio() {
     // Configure base options
-    final baseOptions = BaseOptions(
+    _dio.options = BaseOptions(
       baseUrl: baseUrl,
+      connectTimeout: const Duration(seconds: 15), // Example timeout
+      receiveTimeout: const Duration(seconds: 15), // Example timeout
+      sendTimeout: const Duration(seconds: 15), // Example timeout
       // Headers can be set here, but AuthInterceptor handles Authorization
       // headers: {'Content-Type': 'application/json'},
     );
-
-    if (!isWeb) {
-      baseOptions
-        ..connectTimeout = const Duration(seconds: 15)
-        ..receiveTimeout = const Duration(seconds: 15)
-        ..sendTimeout = const Duration(seconds: 15);
-    }
-
-    _dio.options = baseOptions;
 
     // Add default interceptors
     _dio.interceptors.addAll([
@@ -65,12 +57,9 @@ class HtHttpClient {
     // );
   }
 
-  /// The Dio instance used for making requests.
+  /// The configured Dio instance used for making requests.
   final Dio _dio;
-
-  /// Flag indicating if the client is operating in a web environment.
-  final bool _isWeb;
-
+  
   /// Performs a GET request.
   ///
   /// - [path]: The endpoint path appended to the "baseUrl".
@@ -124,14 +113,10 @@ class HtHttpClient {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    dynamic dataToSend = data;
-    if (_isWeb && dataToSend == null) {
-      dataToSend = <String, dynamic>{}; // Use an empty map for null data on web
-    }
     try {
       final response = await _dio.post<T>(
         path,
-        data: dataToSend,
+        data: data,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
