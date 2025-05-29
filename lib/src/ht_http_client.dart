@@ -1,7 +1,9 @@
 //
 // ignore_for_file: only_throw_errors
 
+import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:ht_http_client/src/interceptors/auth_interceptor.dart';
 import 'package:ht_http_client/src/interceptors/error_interceptor.dart';
 import 'package:ht_shared/ht_shared.dart'; // Updated import
@@ -30,18 +32,24 @@ class HtHttpClient {
   HtHttpClient({
     required String baseUrl,
     required TokenProvider tokenProvider,
+    required bool isWeb,
     Dio? dioInstance,
     List<Interceptor>? interceptors,
   }) : _dio = dioInstance ?? Dio() {
     // Configure base options
     _dio.options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 15), // Example timeout
-      receiveTimeout: const Duration(seconds: 15), // Example timeout
-      sendTimeout: const Duration(seconds: 15), // Example timeout
-      // Headers can be set here, but AuthInterceptor handles Authorization
-      // headers: {'Content-Type': 'application/json'},
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
+      sendTimeout: const Duration(seconds: 15),
     );
+
+    // Set the appropriate HttpClientAdapter
+    if (isWeb) {
+      _dio.httpClientAdapter = BrowserHttpClientAdapter();
+    } else {
+      _dio.httpClientAdapter = IOHttpClientAdapter();
+    }
 
     // Add default interceptors
     _dio.interceptors.addAll([
@@ -59,7 +67,7 @@ class HtHttpClient {
 
   /// The configured Dio instance used for making requests.
   final Dio _dio;
-  
+
   /// Performs a GET request.
   ///
   /// - [path]: The endpoint path appended to the "baseUrl".
