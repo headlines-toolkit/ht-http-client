@@ -46,7 +46,7 @@ class HtHttpClient {
 
     // Set the appropriate HttpClientAdapter
     if (isWeb) {
-      _dio.httpClientAdapter = BrowserHttpClientAdapter();
+      _dio.httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
     } else {
       _dio.httpClientAdapter = IOHttpClientAdapter();
     }
