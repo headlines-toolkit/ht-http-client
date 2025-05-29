@@ -30,18 +30,25 @@ class HtHttpClient {
   HtHttpClient({
     required String baseUrl,
     required TokenProvider tokenProvider,
+    required bool isWeb,
     Dio? dioInstance,
     List<Interceptor>? interceptors,
   }) : _dio = dioInstance ?? Dio() {
     // Configure base options
-    _dio.options = BaseOptions(
+    final baseOptions = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 15), // Example timeout
-      receiveTimeout: const Duration(seconds: 15), // Example timeout
-      sendTimeout: const Duration(seconds: 15), // Example timeout
       // Headers can be set here, but AuthInterceptor handles Authorization
       // headers: {'Content-Type': 'application/json'},
     );
+
+    if (!isWeb) {
+      baseOptions
+        ..connectTimeout = const Duration(seconds: 15)
+        ..receiveTimeout = const Duration(seconds: 15)
+        ..sendTimeout = const Duration(seconds: 15);
+    }
+
+    _dio.options = baseOptions;
 
     // Add default interceptors
     _dio.interceptors.addAll([
