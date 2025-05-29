@@ -33,7 +33,8 @@ class HtHttpClient {
     required bool isWeb,
     Dio? dioInstance,
     List<Interceptor>? interceptors,
-  }) : _dio = dioInstance ?? Dio() {
+  }) : _dio = dioInstance ?? Dio(),
+       _isWeb = isWeb {
     // Configure base options
     final baseOptions = BaseOptions(
       baseUrl: baseUrl,
@@ -64,8 +65,11 @@ class HtHttpClient {
     // );
   }
 
-  /// The configured Dio instance used for making requests.
+  /// The Dio instance used for making requests.
   final Dio _dio;
+
+  /// Flag indicating if the client is operating in a web environment.
+  final bool _isWeb;
 
   /// Performs a GET request.
   ///
@@ -120,10 +124,14 @@ class HtHttpClient {
     Options? options,
     CancelToken? cancelToken,
   }) async {
+    dynamic dataToSend = data;
+    if (_isWeb && dataToSend == null) {
+      dataToSend = <String, dynamic>{}; // Use an empty map for null data on web
+    }
     try {
       final response = await _dio.post<T>(
         path,
-        data: data,
+        data: dataToSend,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
