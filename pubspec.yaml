@@ -4,7 +4,7 @@ repository: https://github.com/headlines-toolkit/ht_http_client
 publish_to: none
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.8.0
 
 dependencies:
   dio: ^5.8.0+1
